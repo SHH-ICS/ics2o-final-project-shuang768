@@ -106,7 +106,7 @@ def setupRoomOne(all_sprites_list):
      
     # Loop through the list. Create the wall, add it to the list
     for item in walls:
-        wall=Wall(item[0],item[1],item[2],item[3],blue)
+        wall=Wall(item[0],item[1],item[2],item[3],Color('red'))
         wall_list.add(wall)
         all_sprites_list.add(wall)
          
@@ -501,38 +501,65 @@ def startGame():
   score = 0
 
   done = False
-
-  #i = 0
-
-  while done == False:
+  done=intro()
+  
+  while done == 1:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
-      direct=direction
       for event in pygame.event.get():
           if event.type == pygame.QUIT:
               done=True
-
           if event.type == pygame.KEYDOWN:
               if event.key == pygame.K_LEFT:
                   Pacman.changespeed(-30,0)
                   direction="left"
-              if event.key == pygame.K_RIGHT:
+              elif event.key == pygame.K_RIGHT:
                   Pacman.changespeed(30,0)
                   direction="right"
-              if event.key == pygame.K_UP:
+              elif event.key == pygame.K_UP:
                   Pacman.changespeed(0,-30)
                   direction = "up"
-              if event.key == pygame.K_DOWN:
+              elif event.key == pygame.K_DOWN:
                   Pacman.changespeed(0,30)
                   direction="down"
 
           if event.type == pygame.KEYUP:
               if event.key == pygame.K_LEFT:
                   Pacman.changespeed(30,0)
-              if event.key == pygame.K_RIGHT:
+              elif event.key == pygame.K_RIGHT:
                   Pacman.changespeed(-30,0)
-              if event.key == pygame.K_UP:
+              elif event.key == pygame.K_UP:
                   Pacman.changespeed(0,30)
-              if event.key == pygame.K_DOWN:
+              elif event.key == pygame.K_DOWN:
+                  Pacman.changespeed(0,-30)
+
+  while done == "hack":
+      # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              done=True
+
+          if event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                  Pacman.changespeed(-30,0)
+                  direction="left"
+              elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                  Pacman.changespeed(30,0)
+                  direction="right"
+              elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                  Pacman.changespeed(0,-30)
+                  direction = "up"
+              elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                  Pacman.changespeed(0,30)
+                  direction="down"
+
+          if event.type == pygame.KEYUP:
+              if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                  Pacman.changespeed(30,0)
+              elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                  Pacman.changespeed(-30,0)
+              elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                  Pacman.changespeed(0,30)
+              elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                   Pacman.changespeed(0,-30)
       # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
    
@@ -636,7 +663,50 @@ def doNext(message,left,all_sprites_list,block_list,ghost_list,pacman_collide,wa
       pygame.display.flip()
       clock.tick(15)
 
-def intro(text,)
+def intro(text,):
+  intro=True
+  while intro:
+      # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          pygame.quit()
+        if event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_ESCAPE:
+            pygame.quit()
+          elif event.key == pygame.K_1:
+            done=1
+          elif event.key == pygame.K_2:
+            done=2
+          elif event.key == pygame.K_3:
+            done="hack"
+        return done
+      #ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
+
+      # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
+      #Grey background
+      w = pygame.Surface((400,200))  # the size of your rect
+      w.set_alpha(10)                # alpha level
+      w.fill((128,128,128))           # this fills the entire surface
+      screen.blit(w, (100,200))    # (0,0) are the top-left coordinates
+
+      smallfont=pygame.font.SysFont("comicsansms",25)
+      medfont=pygame.font.SysFont("comicsansms",50)
+      #Won or lost
+      text1=smallfont.render(text, True, white)
+      screen.blit(text1, [105, 233])
+      text2=medfont.render("To continue using arrowkey, press 1.", True, white)
+      screen.blit(text2, [165, 303])
+      text3=medfont.render("To continue using WASD, press 2.", True, white)
+      screen.blit(text3, [165, 303])
+      text4=medfont.render("To continue using bug, press 3.", True, white)
+      screen.blit(text4, [135, 303])
+      text5=medfont.render("To quit, press ESCAPE.", True, white)
+      screen.blit(text5, [165, 333])
+      #ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
+
+      #UPDATE THE GAME
+      pygame.display.flip()
+      clock.tick(15)
 startGame()
 
 pygame.quit()
