@@ -338,7 +338,7 @@ clyde_y = default_y
 clyde_x = 303 + (32 - 16)
 
 
-def startGame(done):
+def startGame(fps):
     direction = "right"
     #Initialize lists
     all_sprites_list = pygame.sprite.RenderPlain()
@@ -414,11 +414,12 @@ def startGame(done):
 
     score = 0
 
-    while done == "arrow":
+    done=True
+    while done == True:
         # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                done==False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     Pacman.changespeed(-30, 0)
@@ -441,64 +442,6 @@ def startGame(done):
                 elif event.key == pygame.K_UP:
                     Pacman.changespeed(0, 30)
                 elif event.key == pygame.K_DOWN:
-                    Pacman.changespeed(0, -30)
-
-    while done == "WASD":
-        # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    Pacman.changespeed(-30, 0)
-                    direction = "left"
-                elif event.key == pygame.K_d:
-                    Pacman.changespeed(30, 0)
-                    direction = "right"
-                elif event.key == pygame.K_w:
-                    Pacman.changespeed(0, -30)
-                    direction = "up"
-                elif event.key == pygame.K_s:
-                    Pacman.changespeed(0, 30)
-                    direction = "down"
-
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT:
-                    Pacman.changespeed(30, 0)
-                elif event.key == pygame.K_RIGHT:
-                    Pacman.changespeed(-30, 0)
-                elif event.key == pygame.K_UP:
-                    Pacman.changespeed(0, 30)
-                elif event.key == pygame.K_DOWN:
-                    Pacman.changespeed(0, -30)
-                  
-    while done == "hack":
-        # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    Pacman.changespeed(-30, 0)
-                    direction = "left"
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    Pacman.changespeed(30, 0)
-                    direction = "right"
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
-                    Pacman.changespeed(0, -30)
-                    direction = "up"
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    Pacman.changespeed(0, 30)
-                    direction = "down"
-
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    Pacman.changespeed(30, 0)
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    Pacman.changespeed(-30, 0)
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
-                    Pacman.changespeed(0, 30)
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     Pacman.changespeed(0, -30)
         # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
 
@@ -571,7 +514,7 @@ def startGame(done):
 
         #UPDATE THE GAME
         pygame.display.flip()
-        clock.tick(15)
+        clock.tick(fps)
 
 
 def doNext(message, left, all_sprites_list, block_list, ghost_list,
@@ -591,7 +534,7 @@ def doNext(message, left, all_sprites_list, block_list, ghost_list,
                     del pacman_collide
                     del wall_list
                     del gate
-                    intro(" ","")
+                    intro(" "," ")
         #ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
 
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
@@ -650,11 +593,11 @@ def intro(text, text4):
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 if event.key == pygame.K_1:
-                    startGame("arrow")
+                    startGame(10)
                 if event.key == pygame.K_2:
-                    startGame("WASD")
+                    startGame(15)
                 if event.key == pygame.K_3:
-                    startGame("hack")
+                    startGame(20)
         #ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
 
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
@@ -670,7 +613,7 @@ def intro(text, text4):
         screen.blit(text1, [105, 233])
         text3 = smallfont.render(text4, True, white)
         screen.blit(text3, [105, 263])
-        text2 = smallfont.render("press 1 for arrow, 2 for WASD, 3 for hack",
+        text2 = smallfont.render("press 1 for slow, 2 for medium, 3 for fast",
                                  True, white)
         screen.blit(text2, [165, 303])
         text5 = smallfont.render("To quit, press ESCAPE.", True, white)
@@ -683,7 +626,7 @@ def intro(text, text4):
 
 
 intro("welcome to pacman, your goal is to eat all target",
-      "do not get hit by ghost")
+      "do not get hit by ghost, use arrowkey")
 startGame()
 
 pygame.quit()
