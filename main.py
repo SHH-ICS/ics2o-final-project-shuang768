@@ -500,15 +500,16 @@ def startGame(fps):
         text = font.render(
             "Score: " + str(score) + "/" + str(block_list_length), True, red)
         screen.blit(text, [10, 10])
+        
 
         if score == block_list_length:
-            doNext("Congratulations, you won!", 145, all_sprites_list,
+            doNext("Congratulations, you won!", 285, all_sprites_list,
                    block_list, ghost_list, pacman_collide, wall_list, gate)
 
         ghost_hit_list = pygame.sprite.spritecollide(Pacman, ghost_list, False)
 
         if ghost_hit_list:
-            doNext("Game Over", 235, all_sprites_list, block_list, ghost_list,
+            doNext("Game Over", 375, all_sprites_list, block_list, ghost_list,
                    pacman_collide, wall_list, gate)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
@@ -542,16 +543,16 @@ def doNext(message, left, all_sprites_list, block_list, ghost_list,
         w = pygame.Surface((400, 200))  # the size of your rect
         w.set_alpha(10)  # alpha level
         w.fill((128, 128, 128))  # this fills the entire surface
-        screen.blit(w, (100, 200))  # (0,0) are the top-left coordinates
+        screen.blit(w, (255, 200))  # (0,0) are the top-left coordinates
 
         #Won or lost
         text1 = font.render(message, True, white)
         screen.blit(text1, [left, 233])
 
         text2 = font.render("To play again, press ENTER.", True, white)
-        screen.blit(text2, [135, 303])
+        screen.blit(text2, [265, 303])
         text3 = font.render("To quit, press ESCAPE.", True, white)
-        screen.blit(text3, [165, 333])
+        screen.blit(text3, [265, 333])
         #ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         #UPDATE THE GAME
@@ -605,26 +606,39 @@ def intro(text, text4):
         w = pygame.Surface((400, 200))  # the size of your rect
         w.set_alpha(10)  # alpha level
         w.fill((128, 128, 128))  # this fills the entire surface
-        screen.blit(w, (100, 200))  # (0,0) are the top-left coordinates
+        screen.blit(w, (255, 200))  # (0,0) are the top-left coordinates
 
         smallfont = pygame.font.SysFont("freesansbold.ttf", 25)
         #Won or lost
         text1 = smallfont.render(text, True, white)
-        screen.blit(text1, [105, 233])
+        screen.blit(text1, [260, 233])
         text3 = smallfont.render(text4, True, white)
-        screen.blit(text3, [105, 263])
+        screen.blit(text3, [265, 263])
         text2 = smallfont.render("press 1 for slow, 2 for medium, 3 for fast",
                                  True, white)
-        screen.blit(text2, [165, 303])
+        screen.blit(text2, [265, 303])
         text5 = smallfont.render("To quit, press ESCAPE.", True, white)
-        screen.blit(text5, [165, 333])
+        screen.blit(text5, [265, 333])
         #ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         #UPDATE THE GAME
         pygame.display.flip()
         clock.tick(15)
 
-
+def highscore(score):
+  inFile = open('scores', 'r')
+  lin= inFile.readlines()
+  line=int(lin[-1])
+  if score>line:
+    filehandle = open('scores','w')
+    filehandle.write(str(score))
+    filehandle.close()
+    text=smallfont.render("highscore: "+str(score),True,Color('black'))
+    gamedisplay.blit(text,[0,15])
+  elif score<=line:
+    text=smallfont.render("highscore: "+str(line), True, Color('black'))
+    gamedisplay.blit(text,[0,15])
+    
 intro("welcome to pacman, your goal is to eat all target",
       "do not get hit by ghost, use arrowkey")
 startGame()
