@@ -339,6 +339,9 @@ clyde_x = 303 + (32 - 16)
 
 
 def startGame(fps):
+    pygame.mixer.init()
+    pygame.mixer.music.load('pacman.mp3')
+    pygame.mixer.music.play(-1, 0.0)
     direction = "right"
     #Initialize lists
     all_sprites_list = pygame.sprite.RenderPlain()
@@ -382,7 +385,7 @@ def startGame(fps):
     Clyde = Ghost(clyde_x, clyde_y, "images/Clyde.png", "images/Clyde.png")
     ghost_list.add(Clyde)
     all_sprites_list.add(Clyde)
-
+#19,26
     # Draw the grid
     for row in range(19):
         for column in range(26):
@@ -410,7 +413,7 @@ def startGame(fps):
                     block_list.add(block)
                     all_sprites_list.add(block)
 
-    block_list_length = len(block_list)
+                    block_list_length = len(block_list)*2
 
     score = 0
 
@@ -488,6 +491,33 @@ def startGame(fps):
         if len(blocks_hit_list) > 0:
             score += len(blocks_hit_list)
         # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
+        if score == (block_list_length/2):
+          for row in range(19):
+            for column in range(26):
+              if (row == 7 or row == 8) and (column == 8 or column == 9
+                                             or column == 10):
+                  continue
+              else:
+                  block = Block(yellow, 4, 4)
+  
+                  # Set a random location for the block
+                  block.rect.x = (30 * column + 6) + 26
+                  block.rect.y = (30 * row + 6) + 26
+  
+                  b_collide = pygame.sprite.spritecollide(
+                      block, wall_list, False)
+                  p_collide = pygame.sprite.spritecollide(
+                      block, pacman_collide, False)
+  
+                  if b_collide:
+                      continue
+                  elif p_collide:
+                      continue
+                  else:
+                      # Add the block to the list of objects
+                      block_list.add(block)
+                      all_sprites_list.add(block)
+  
 
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
         screen.fill(black)
@@ -497,18 +527,23 @@ def startGame(fps):
         all_sprites_list.draw(screen)
         ghost_list.draw(screen)
 
-        text = font.render(
-            "Score: " + str(score) + "/" + str(block_list_length), True, red)
-        screen.blit(text, [10, 10])
-        
-
-        if score == block_list_length:
+        highscore(score)
+        if score>=block_list_length: 
+            text = font.render("Score: " + str(block_list_length) + "/" + str(block_list_length), True, red)
+            screen.blit(text, [10, 10])
             doNext("Congratulations, you won!", 285, all_sprites_list,
                    block_list, ghost_list, pacman_collide, wall_list, gate)
-
+        text = font.render("Score: " + str(score) + "/" + str(block_list_length), True, red)
+        screen.blit(text, [10, 10])
+      
+        
         ghost_hit_list = pygame.sprite.spritecollide(Pacman, ghost_list, False)
 
         if ghost_hit_list:
+            pygame.mixer.init()
+            pygame.mixer.music.load('pacman die.mp3')
+            pygame.mixer.music.play(-1, 0.0)
+            pygame.mixer.music.fadeout(3)
             doNext("Game Over", 375, all_sprites_list, block_list, ghost_list,
                    pacman_collide, wall_list, gate)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
@@ -626,18 +661,27 @@ def intro(text, text4):
         clock.tick(15)
 
 def highscore(score):
-  inFile = open('scores', 'r')
-  lin= inFile.readlines()
-  line=int(lin[-1])
+  smallfont = pygame.font.SysFont("freesansbold.ttf", 40)
+  try:
+    inFile = open('highscore', 'r')
+    lin= inFile.readlines()
+    line=int(lin[-1])
+  except ValueError:
+    filehandle = open('highscore','w')
+    filehandle.write("0")
+    filehandle.close()
+    inFile = open('highscore', 'r')
+    lin= inFile.readlines()
+    line=int(lin[-1])
   if score>line:
-    filehandle = open('scores','w')
+    filehandle = open('highscore','w')
     filehandle.write(str(score))
     filehandle.close()
-    text=smallfont.render("highscore: "+str(score),True,Color('black'))
-    gamedisplay.blit(text,[0,15])
+    text=smallfont.render("highscore: "+str(score),True,Color('red'))
+    screen.blit(text,[610,10])
   elif score<=line:
-    text=smallfont.render("highscore: "+str(line), True, Color('black'))
-    gamedisplay.blit(text,[0,15])
+    text=smallfont.render("highscore: "+str(line), True, Color('red'))
+    screen.blit(text,[610,10])
     
 intro("welcome to pacman, your goal is to eat all target",
       "do not get hit by ghost, use arrowkey")
