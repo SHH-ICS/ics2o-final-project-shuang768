@@ -21,9 +21,9 @@ pacman_img = pygame.image.load('images/pacman.png')
 pygame.display.set_icon(pacman_img)
 
 #Add music
-pygame.mixer.init()
-pygame.mixer.music.load('pacman.mp3')
-pygame.mixer.music.play(-1, 0.0)
+#pygame.mixer.init()
+#pygame.mixer.music.load('pacman.mp3')
+#pygame.mixer.music.play(-1, 0.0)
 
 
 # This class represents the walls of the room
@@ -340,7 +340,7 @@ clyde_x = 303 + (32 - 16)
 
 def startGame(fps):
     pygame.mixer.init()
-    pygame.mixer.music.load('pacman.mp3')
+    pygame.mixer.music.load('pacman1.mp3')
     pygame.mixer.music.play(-1, 0.0)
     direction = "right"
     #Initialize lists
@@ -498,7 +498,7 @@ def startGame(fps):
                                              or column == 10):
                   continue
               else:
-                  block = Block(yellow, 4, 4)
+                  block = Block(blue, 4, 4)
   
                   # Set a random location for the block
                   block.rect.x = (30 * column + 6) + 26
@@ -540,10 +540,10 @@ def startGame(fps):
         ghost_hit_list = pygame.sprite.spritecollide(Pacman, ghost_list, False)
 
         if ghost_hit_list:
+            pygame.mixer.music.unload()
             pygame.mixer.init()
             pygame.mixer.music.load('pacman die.mp3')
-            pygame.mixer.music.play(-1, 0.0)
-            pygame.mixer.music.fadeout(3)
+            pygame.mixer.music.play(1, 0.0)
             doNext("Game Over", 375, all_sprites_list, block_list, ghost_list,
                    pacman_collide, wall_list, gate)
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
