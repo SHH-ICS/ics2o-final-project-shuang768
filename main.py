@@ -304,7 +304,7 @@ pygame.init()
 screen = pygame.display.set_mode([811, 606])
 
 # Set the title of the window
-pygame.display.set_caption('Pacman')
+pygame.display.set_caption('Pacman, ics2o RST')
 
 # Create a surface we can draw on
 background = pygame.Surface(screen.get_size())
